@@ -9,6 +9,10 @@ public class Player_Network : NetworkBehaviour
 
     public override void OnStartLocalPlayer()
     {
-        base.OnStartLocalPlayer();
+        GetComponent<CameraScript>().enabled = true;
+        camera_holding_object.SetActive(true);
+
+        
+
     }
 }
