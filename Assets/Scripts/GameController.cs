@@ -1,9 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
-public class GameController : MonoBehaviour
+public class GameController : NetworkBehaviour
 {
+    public int num_players;
+    public Player[] player_array;
+    public GameObject active_player;
+    public bool p1_active;
+
     public GameObject grid;
 
     public GameObject pawn_prefab;
@@ -22,9 +28,37 @@ public class GameController : MonoBehaviour
 
     public Material tan;
     public Material black;
+    public Material weird;
 
-    private void Start()
+    [SyncVar]
+    public GameObject THIS_ONE;
+
+    [Command]
+    public void CmdGetFunky()
     {
+        THIS_ONE.GetComponent<MeshRenderer>().material = weird;
+        THIS_ONE.transform.position += new Vector3(1, 1, 1);
+        RpcNextColor();
+        
+    }
+    [ClientRpc]
+    public void RpcNextColor()
+    {
+        THIS_ONE.GetComponent<MeshRenderer>().material = weird;
+        THIS_ONE.transform.position += new Vector3(1, 1, 1);
+    }
+
+    public override void OnStartServer()
+    {
+        BuildBoard();
+    }
+
+  
+    public void BuildBoard()
+    {
+    
+        grid = GameObject.Find("Grid");
+
         // Create a 2d array of legal positions for pieces.
         // While we're at it, place game pieces AND tile objects.
         position_array = new Vector2[grid_size, grid_size];
@@ -44,6 +78,8 @@ public class GameController : MonoBehaviour
                 {
                     // Place a pawn.
                     GameObject pawn = Instantiate(pawn_prefab, grid.transform);
+                    NetworkServer.Spawn(pawn);
+                    THIS_ONE = pawn;
                     pawn.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
                     pawn.transform.position = new Vector3(tile_array[i, j].transform.position.x, -0.37f, tile_array[i, j].transform.position.z);
                     if (j == 1)
@@ -90,7 +126,24 @@ public class GameController : MonoBehaviour
                         // Place a king.
                         GameObject pawn = Instantiate(king_prefab, grid.transform);
                         pawn.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
-                        pawn.transform.position = new Vector3(tile_array[i, j].transform.position.x, 1, tile_array[i, j].transform.position.z);
+                        pawn.transform.position = new Vector3(tile_array[i, j].transform.position.x, 0.542f, tile_array[i, j].transform.position.z);
+                        if (j == 0)
+                        {
+                            Material[] temp;
+                            temp = new Material[2];
+                            temp[0] = tan;
+                            temp[1] = tan;
+                            pawn.GetComponent<MeshRenderer>().materials = temp;
+                            
+                        }
+                        else
+                        {
+                            Material[] temp;
+                            temp = new Material[2];
+                            temp[0] = black;
+                            temp[1] = black;
+                            pawn.GetComponent<MeshRenderer>().materials = temp;
+                        }
                     }
                 }
 
@@ -99,4 +152,10 @@ public class GameController : MonoBehaviour
         }
         
     }
+    
+    private void Update()
+    {
+
+    }
+
 }
