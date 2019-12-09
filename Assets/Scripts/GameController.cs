@@ -30,30 +30,28 @@ public class GameController : NetworkBehaviour
     public Material black;
     public Material weird;
 
-    [SyncVar]
-    public GameObject THIS_ONE;
+   // [SyncVar][SerializeField]
+   // public GameObject THIS_ONE;
 
-    [Command]
-    public void CmdGetFunky()
-    {
-        THIS_ONE.GetComponent<MeshRenderer>().material = weird;
-        THIS_ONE.transform.position += new Vector3(1, 1, 1);
-        RpcNextColor();
-        
-    }
-    [ClientRpc]
+   // [Command]
+    //public void CmdGetFunky()
+    //{
+      //  THIS_ONE.GetComponent<MeshRenderer>().material = weird;
+        //THIS_ONE.transform.position += new Vector3(1, 1, 1);     
+    //}
+   /* [ClientRpc]
     public void RpcNextColor()
     {
         THIS_ONE.GetComponent<MeshRenderer>().material = weird;
         THIS_ONE.transform.position += new Vector3(1, 1, 1);
-    }
+    } */
 
     public override void OnStartServer()
     {
         BuildBoard();
     }
 
-  
+    [Server]
     public void BuildBoard()
     {
     
@@ -79,7 +77,7 @@ public class GameController : NetworkBehaviour
                     // Place a pawn.
                     GameObject pawn = Instantiate(pawn_prefab, grid.transform);
                     NetworkServer.Spawn(pawn);
-                    THIS_ONE = pawn;
+                   // THIS_ONE = pawn;
                     pawn.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
                     pawn.transform.position = new Vector3(tile_array[i, j].transform.position.x, -0.37f, tile_array[i, j].transform.position.z);
                     if (j == 1)

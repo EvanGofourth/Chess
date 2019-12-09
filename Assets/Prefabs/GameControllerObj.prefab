@@ -1,0 +1,104 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3372314838699564361
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3372314838699564362}
+  - component: {fileID: 3372314838699564363}
+  - component: {fileID: 3372314838699564360}
+  m_Layer: 0
+  m_Name: GameControllerObj
+  m_TagString: GameController
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3372314838699564362
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3372314838699564361}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -5.296887, y: 2.6315718, z: 4.717306}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3372314838699564363
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3372314838699564361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8258ea15b8f74c4889ce485d21cbbb1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_SceneId:
+    m_Value: 0
+  m_AssetId:
+    i0: 0
+    i1: 0
+    i2: 0
+    i3: 0
+    i4: 0
+    i5: 0
+    i6: 0
+    i7: 0
+    i8: 0
+    i9: 0
+    i10: 0
+    i11: 0
+    i12: 0
+    i13: 0
+    i14: 0
+    i15: 0
+  m_ServerOnly: 0
+  m_LocalPlayerAuthority: 1
+--- !u!114 &3372314838699564360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3372314838699564361}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdda186b1d0a85a4f8217b1c52e54b1e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  num_players: 0
+  player_array: []
+  active_player: {fileID: 0}
+  p1_active: 0
+  grid: {fileID: 0}
+  pawn_prefab: {fileID: 3675343329586595443, guid: 16332fb20a41b03459434f6ecc9a9430,
+    type: 3}
+  rook_prefab: {fileID: 415423708723712329, guid: 6e193903ce2dbd44f9eef6cca6199f3e,
+    type: 3}
+  knight_prefab: {fileID: 8223696326848069405, guid: 95e0070ab0af9b6448b423d531b37488,
+    type: 3}
+  bishop_prefab: {fileID: 6357217151316859527, guid: 5c1c89881d007fb4299ad298d7497737,
+    type: 3}
+  queen_prefab: {fileID: 3417938691015376420, guid: 4ed85c84c5feb774e925c5f8ad1ff738,
+    type: 3}
+  king_prefab: {fileID: 6449859697025941476, guid: bd036197dd2f9f2499359523b5a8dec5,
+    type: 3}
+  grid_size: 8
+  shift_amount: 1.23
+  tile_prefab: {fileID: 1937856748940161748, guid: 549184fcb078f8d4e95e7bf2c1da5efb,
+    type: 3}
+  tan: {fileID: 2100000, guid: ab5db10e91ce563448f21e71d672e0b7, type: 2}
+  black: {fileID: 2100000, guid: 523c3e1ce0c9d6d4a9729bd547c56c29, type: 2}
+  weird: {fileID: 2100000, guid: f02c1a47c8ec9b54884c6190120cccbf, type: 2}
+  THIS_ONE: {fileID: 0}

@@ -297,3 +297,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camera_holding_object: {fileID: 2374677946559560064}
+  controller_prefab: {fileID: 3372314838699564361, guid: a089379d4a1312341ab4402c1a13989d,
+    type: 3}
