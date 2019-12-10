@@ -18,6 +18,13 @@ public class GameController : NetworkBehaviour
     public GameObject bishop_prefab;
     public GameObject queen_prefab;
     public GameObject king_prefab;
+    
+    public GameObject pawn_black_prefab;
+    public GameObject rook_black_prefab;
+    public GameObject knight_black_prefab;
+    public GameObject bishop_black_prefab;
+    public GameObject queen_black_prefab;
+    public GameObject king_black_prefab;
 
     public int grid_size;
     public float shift_amount;
@@ -30,21 +37,6 @@ public class GameController : NetworkBehaviour
     public Material black;
     public Material weird;
 
-   // [SyncVar][SerializeField]
-   // public GameObject THIS_ONE;
-
-   // [Command]
-    //public void CmdGetFunky()
-    //{
-      //  THIS_ONE.GetComponent<MeshRenderer>().material = weird;
-        //THIS_ONE.transform.position += new Vector3(1, 1, 1);     
-    //}
-   /* [ClientRpc]
-    public void RpcNextColor()
-    {
-        THIS_ONE.GetComponent<MeshRenderer>().material = weird;
-        THIS_ONE.transform.position += new Vector3(1, 1, 1);
-    } */
 
     public override void OnStartServer()
     {
@@ -54,7 +46,6 @@ public class GameController : NetworkBehaviour
     [Server]
     public void BuildBoard()
     {
-    
         grid = GameObject.Find("Grid");
 
         // Create a 2d array of legal positions for pieces.
@@ -68,25 +59,39 @@ public class GameController : NetworkBehaviour
                 //Build position_array.
                 position_array[i, j] = new Vector2(i * shift_amount, j * shift_amount);
                 // Instantiate Tiles.
-                tile_array[i,j] = Instantiate(tile_prefab, grid.transform);
+                tile_array[i,j] = Instantiate(tile_prefab, grid.transform);             
+                NetworkServer.Spawn(tile_array[i, j]);
                 tile_array[i, j].transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
                 tile_array[i, j].transform.position = new Vector3(tile_array[i, j].transform.position.x, 0.4f, tile_array[i, j].transform.position.z);
+                tile_array[i, j].GetComponent<Tile>().x = i;
+                tile_array[i, j].GetComponent<Tile>().y = j;
+
                 // Instantiate GamePieces.
-                if(j == 1 || j == 6)
-                {
-                    // Place a pawn.
-                    GameObject pawn = Instantiate(pawn_prefab, grid.transform);
-                    NetworkServer.Spawn(pawn);
-                   // THIS_ONE = pawn;
-                    pawn.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
-                    pawn.transform.position = new Vector3(tile_array[i, j].transform.position.x, -0.37f, tile_array[i, j].transform.position.z);
+                if (j == 1 || j == 6)
+                {                                                        
                     if (j == 1)
                     {
-                        pawn.GetComponent<MeshRenderer>().material = tan;
+                        // Place a pawn.
+                        GameObject pawn = Instantiate(pawn_prefab, grid.transform);
+                        NetworkServer.Spawn(pawn);
+                        tile_array[i, j].GetComponent<Tile>().occupied = true;
+                        tile_array[i, j].GetComponent<Tile>().game_piece = pawn;
+                        pawn.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
+                        pawn.transform.position = new Vector3(tile_array[i, j].transform.position.x, -0.37f, tile_array[i, j].transform.position.z);
+                        pawn.GetComponent<Piece>().x = i;
+                        pawn.GetComponent<Piece>().y = j;
                     }
                     else
                     {
-                        pawn.GetComponent<MeshRenderer>().material = black;
+                        // Place a pawn.
+                        GameObject pawn = Instantiate(pawn_black_prefab, grid.transform);
+                        NetworkServer.Spawn(pawn);
+                        tile_array[i, j].GetComponent<Tile>().occupied = true;
+                        tile_array[i, j].GetComponent<Tile>().game_piece = pawn;
+                        pawn.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
+                        pawn.transform.position = new Vector3(tile_array[i, j].transform.position.x, -0.37f, tile_array[i, j].transform.position.z);
+                        pawn.GetComponent<Piece>().x = i;
+                        pawn.GetComponent<Piece>().y = j;
                     }
                 }
                 if(j == 0 || j == 7)
@@ -94,9 +99,10 @@ public class GameController : NetworkBehaviour
                     if(i == 0 || i == 7)
                     {
                         // Place a rook.
-                        GameObject pawn = Instantiate(rook_prefab, grid.transform);
-                        pawn.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
-                        pawn.transform.position = new Vector3(tile_array[i, j].transform.position.x, 1, tile_array[i, j].transform.position.z);
+                        GameObject rook = Instantiate(rook_prefab, grid.transform);
+                        //NetworkServer.Spawn(rook);
+                        rook.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
+                        rook.transform.position = new Vector3(tile_array[i, j].transform.position.x, 1, tile_array[i, j].transform.position.z);
                     }
                     if(i == 1 || i == 6)
                     {
@@ -108,9 +114,10 @@ public class GameController : NetworkBehaviour
                     if(i == 2 || i == 5)
                     {
                         // Place a bishop.
-                        GameObject pawn = Instantiate(bishop_prefab, grid.transform);
-                        pawn.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
-                        pawn.transform.position = new Vector3(tile_array[i, j].transform.position.x, 1, tile_array[i, j].transform.position.z);
+                        GameObject knight = Instantiate(bishop_prefab, grid.transform);
+                        //NetworkServer
+                        knight.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
+                        knight.transform.position = new Vector3(tile_array[i, j].transform.position.x, 1, tile_array[i, j].transform.position.z);
                     }
                     if( i == 3)
                     {
@@ -121,26 +128,26 @@ public class GameController : NetworkBehaviour
                     }
                     if (i == 4)
                     {
-                        // Place a king.
-                        GameObject pawn = Instantiate(king_prefab, grid.transform);
-                        pawn.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
-                        pawn.transform.position = new Vector3(tile_array[i, j].transform.position.x, 0.542f, tile_array[i, j].transform.position.z);
+
                         if (j == 0)
                         {
-                            Material[] temp;
-                            temp = new Material[2];
-                            temp[0] = tan;
-                            temp[1] = tan;
-                            pawn.GetComponent<MeshRenderer>().materials = temp;
-                            
+                            // Place a king.
+                            GameObject king = Instantiate(king_prefab, grid.transform);
+                            NetworkServer.Spawn(king);
+                            king.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
+                            king.transform.position = new Vector3(tile_array[i, j].transform.position.x, 0.542f, tile_array[i, j].transform.position.z);
+                            king.GetComponent<Piece>().x = i;
+                            king.GetComponent<Piece>().y = j;
                         }
                         else
                         {
-                            Material[] temp;
-                            temp = new Material[2];
-                            temp[0] = black;
-                            temp[1] = black;
-                            pawn.GetComponent<MeshRenderer>().materials = temp;
+                            // Place a king.
+                            GameObject king = Instantiate(king_black_prefab, grid.transform);
+                            NetworkServer.Spawn(king);
+                            king.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
+                            king.transform.position = new Vector3(tile_array[i, j].transform.position.x, 0.542f, tile_array[i, j].transform.position.z);
+                            king.GetComponent<Piece>().x = i;
+                            king.GetComponent<Piece>().y = j;
                         }
                     }
                 }
@@ -150,7 +157,9 @@ public class GameController : NetworkBehaviour
         }
         
     }
-    
+
+
+
     private void Update()
     {
 

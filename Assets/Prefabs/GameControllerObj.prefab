@@ -96,9 +96,8 @@ MonoBehaviour:
     type: 3}
   grid_size: 8
   shift_amount: 1.23
-  tile_prefab: {fileID: 1937856748940161748, guid: 549184fcb078f8d4e95e7bf2c1da5efb,
+  tile_prefab: {fileID: 7339587895636359504, guid: 549184fcb078f8d4e95e7bf2c1da5efb,
     type: 3}
   tan: {fileID: 2100000, guid: ab5db10e91ce563448f21e71d672e0b7, type: 2}
   black: {fileID: 2100000, guid: 523c3e1ce0c9d6d4a9729bd547c56c29, type: 2}
   weird: {fileID: 2100000, guid: f02c1a47c8ec9b54884c6190120cccbf, type: 2}
-  THIS_ONE: {fileID: 0}

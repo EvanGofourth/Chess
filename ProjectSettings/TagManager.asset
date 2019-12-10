@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Pawn
   - Piece
+  - Tile
   layers:
   - Default
   - TransparentFX

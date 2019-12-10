@@ -127,6 +127,48 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3372314838699564360, guid: a089379d4a1312341ab4402c1a13989d,
+        type: 3}
+      propertyPath: king_black_prefab
+      value: 
+      objectReference: {fileID: 1578622918294870816, guid: deadf7e08f8b224478f8af9c85691de6,
+        type: 3}
+    - target: {fileID: 3372314838699564360, guid: a089379d4a1312341ab4402c1a13989d,
+        type: 3}
+      propertyPath: pawn_black_prefab
+      value: 
+      objectReference: {fileID: 2857409900483633863, guid: 3392c10262cdef2418ce51faa2071064,
+        type: 3}
+    - target: {fileID: 3372314838699564360, guid: a089379d4a1312341ab4402c1a13989d,
+        type: 3}
+      propertyPath: pawn_prefab
+      value: 
+      objectReference: {fileID: 1367738081690323319, guid: 16332fb20a41b03459434f6ecc9a9430,
+        type: 3}
+    - target: {fileID: 3372314838699564360, guid: a089379d4a1312341ab4402c1a13989d,
+        type: 3}
+      propertyPath: rook_black_prefab
+      value: 
+      objectReference: {fileID: 415423708723712329, guid: 6e193903ce2dbd44f9eef6cca6199f3e,
+        type: 3}
+    - target: {fileID: 3372314838699564360, guid: a089379d4a1312341ab4402c1a13989d,
+        type: 3}
+      propertyPath: knight_black_prefab
+      value: 
+      objectReference: {fileID: 8223696326848069405, guid: 95e0070ab0af9b6448b423d531b37488,
+        type: 3}
+    - target: {fileID: 3372314838699564360, guid: a089379d4a1312341ab4402c1a13989d,
+        type: 3}
+      propertyPath: bishop_black_prefab
+      value: 
+      objectReference: {fileID: 6357217151316859527, guid: 5c1c89881d007fb4299ad298d7497737,
+        type: 3}
+    - target: {fileID: 3372314838699564360, guid: a089379d4a1312341ab4402c1a13989d,
+        type: 3}
+      propertyPath: queen_black_prefab
+      value: 
+      objectReference: {fileID: 3417938691015376420, guid: 4ed85c84c5feb774e925c5f8ad1ff738,
+        type: 3}
     - target: {fileID: 3372314838699564361, guid: a089379d4a1312341ab4402c1a13989d,
         type: 3}
       propertyPath: m_Name
@@ -406,7 +448,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 3b601d59a118b3b44ba12d766878057b,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -0.16
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 3b601d59a118b3b44ba12d766878057b,
         type: 3}
@@ -416,7 +458,7 @@ PrefabInstance:
     - target: {fileID: -4216859302048453862, guid: 3b601d59a118b3b44ba12d766878057b,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0
+      value: 2.41
       objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 3b601d59a118b3b44ba12d766878057b,
         type: 3}
