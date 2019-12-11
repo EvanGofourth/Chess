@@ -167,7 +167,13 @@ PrefabInstance:
         type: 3}
       propertyPath: queen_black_prefab
       value: 
-      objectReference: {fileID: 3417938691015376420, guid: 4ed85c84c5feb774e925c5f8ad1ff738,
+      objectReference: {fileID: 2334956246434770959, guid: 10a8cd1555736304eba2b0ec05ac4977,
+        type: 3}
+    - target: {fileID: 3372314838699564360, guid: a089379d4a1312341ab4402c1a13989d,
+        type: 3}
+      propertyPath: queen_prefab
+      value: 
+      objectReference: {fileID: 4171092234056128332, guid: 4ed85c84c5feb774e925c5f8ad1ff738,
         type: 3}
     - target: {fileID: 3372314838699564361, guid: a089379d4a1312341ab4402c1a13989d,
         type: 3}

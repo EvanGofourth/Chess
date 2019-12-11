@@ -30,18 +30,11 @@ public class GameController : NetworkBehaviour
 
     public int grid_size;
     public float shift_amount;
-    public Vector2[,] position_array;
+   // public Vector2[,] position_array;
 
     public GameObject[,] tile_array;
     public GameObject tile_prefab;
 
-    public struct GameObjectHider
-    {
-       public GameObject m_object;
-    }
-    public class MySyncList : SyncListStruct<GameObjectHider> { };
-
-    public MySyncList Flattened_Tiles;
 
     public Material tan;
     public Material black;
@@ -90,16 +83,7 @@ public class GameController : NetworkBehaviour
             }
 
         }
-        for (int i = 0; i < grid_size; i++)
-        {
-            for (int j = 0; j < grid_size; j++)
-            {
-                GameObjectHider to_insert;
-                to_insert.m_object = tile_array[i, j].gameObject;
-                Flattened_Tiles.Add(to_insert);
-            }
-                
-        }
+
 
     }
 
@@ -110,14 +94,13 @@ public class GameController : NetworkBehaviour
 
         // Create a 2d array of legal positions for pieces.
         // While we're at it, place game pieces AND tile objects.
-        position_array = new Vector2[grid_size, grid_size];
         tile_array = new GameObject[grid_size, grid_size];
         for(int i = 0; i < grid_size; i++)
         {
             for(int j = 0; j < grid_size; j++)
             {
                 //Build position_array.
-                position_array[i, j] = new Vector2(i * shift_amount, j * shift_amount);
+               // position_array[i, j] = new Vector2(i * shift_amount, j * shift_amount);
                 // Instantiate Tiles.
                 tile_array[i,j] = Instantiate(tile_prefab, grid.transform);             
                 NetworkServer.Spawn(tile_array[i, j]);
@@ -183,10 +166,33 @@ public class GameController : NetworkBehaviour
                     }
                     if( i == 3)
                     {
-                        // Place a queen.
-                        GameObject pawn = Instantiate(queen_prefab, grid.transform);
-                        pawn.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
-                        pawn.transform.position = new Vector3(tile_array[i, j].transform.position.x, 1, tile_array[i, j].transform.position.z);
+                        if(j==0)
+                        {
+                            // Place a queen.
+                            GameObject queen = Instantiate(queen_prefab, grid.transform);
+                            NetworkServer.Spawn(queen);
+                            tile_array[i, j].GetComponent<Tile>().occupied = true;
+                            tile_array[i, j].GetComponent<Tile>().game_piece = queen;
+                            queen.GetComponent<Piece>().my_tile = tile_array[i, j];
+                            queen.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
+                            queen.transform.position = new Vector3(tile_array[i, j].transform.position.x, 0.542f, tile_array[i, j].transform.position.z);
+                            queen.GetComponent<Piece>().x = i;
+                            queen.GetComponent<Piece>().y = j;
+                        }
+                        else
+                        {
+                            // Place a queen.
+                            GameObject queen = Instantiate(queen_black_prefab, grid.transform);
+                            NetworkServer.Spawn(queen);
+                            tile_array[i, j].GetComponent<Tile>().occupied = true;
+                            tile_array[i, j].GetComponent<Tile>().game_piece = queen;
+                            queen.GetComponent<Piece>().my_tile = tile_array[i, j];
+                            queen.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
+                            queen.transform.position = new Vector3(tile_array[i, j].transform.position.x, 0.542f, tile_array[i, j].transform.position.z);
+                            queen.GetComponent<Piece>().x = i;
+                            queen.GetComponent<Piece>().y = j;
+                        }
+                        
                     }
                     if (i == 4)
                     {
@@ -196,6 +202,9 @@ public class GameController : NetworkBehaviour
                             // Place a king.
                             GameObject king = Instantiate(king_prefab, grid.transform);
                             NetworkServer.Spawn(king);
+                            tile_array[i, j].GetComponent<Tile>().occupied = true;
+                            tile_array[i, j].GetComponent<Tile>().game_piece = king;
+                            king.GetComponent<Piece>().my_tile = tile_array[i, j];
                             king.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
                             king.transform.position = new Vector3(tile_array[i, j].transform.position.x, 0.542f, tile_array[i, j].transform.position.z);
                             king.GetComponent<Piece>().x = i;
@@ -206,6 +215,9 @@ public class GameController : NetworkBehaviour
                             // Place a king.
                             GameObject king = Instantiate(king_black_prefab, grid.transform);
                             NetworkServer.Spawn(king);
+                            tile_array[i, j].GetComponent<Tile>().occupied = true;
+                            tile_array[i, j].GetComponent<Tile>().game_piece = king;
+                            king.GetComponent<Piece>().my_tile = tile_array[i, j];
                             king.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
                             king.transform.position = new Vector3(tile_array[i, j].transform.position.x, 0.542f, tile_array[i, j].transform.position.z);
                             king.GetComponent<Piece>().x = i;

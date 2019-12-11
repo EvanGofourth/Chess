@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 1801763442719489552}
   - component: {fileID: 1582133300521428807}
   - component: {fileID: 8787826717778620772}
-  - component: {fileID: 7672466060376546063}
   - component: {fileID: 4496925774289118065}
   - component: {fileID: 8144671942138777448}
+  - component: {fileID: -3515711732178046081}
   m_Layer: 0
   m_Name: pawn_black
   m_TagString: Piece
@@ -115,20 +115,6 @@ MonoBehaviour:
     i15: 0
   m_ServerOnly: 0
   m_LocalPlayerAuthority: 0
---- !u!136 &7672466060376546063
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2857409900483633863}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.4839015
-  m_Height: 1.767301
-  m_Direction: 1
-  m_Center: {x: -0.0000005066395, y: 2.4425714, z: 0}
 --- !u!114 &4496925774289118065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,3 +158,19 @@ MonoBehaviour:
   is_bishop: 0
   is_queen: 0
   is_king: 0
+  first_move: 0
+  my_tile: {fileID: 0}
+--- !u!64 &-3515711732178046081
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2857409900483633863}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: -2432090755550338912, guid: 9f74f47c77724f241ae9fa4e0bbac217, type: 3}

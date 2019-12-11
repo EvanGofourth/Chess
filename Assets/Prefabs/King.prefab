@@ -11,10 +11,10 @@ GameObject:
   - component: {fileID: 1504188314969878812}
   - component: {fileID: 4635447320676537590}
   - component: {fileID: 2330827618759875608}
-  - component: {fileID: 6573948783574492579}
   - component: {fileID: 2910138268840317817}
   - component: {fileID: -5827664020435610494}
   - component: {fileID: 8200815624109175303}
+  - component: {fileID: 3372570073750087731}
   m_Layer: 0
   m_Name: King
   m_TagString: Piece
@@ -83,19 +83,6 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!65 &6573948783574492579
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6449859697025941476}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.7855227, y: 1.9012271, z: 0.7960112}
-  m_Center: {x: 0.03366653, y: 0.8154205, z: -0.11359934}
 --- !u!114 &2910138268840317817
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,3 +159,19 @@ MonoBehaviour:
   is_bishop: 0
   is_queen: 0
   is_king: 1
+  first_move: 0
+  my_tile: {fileID: 0}
+--- !u!64 &3372570073750087731
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6449859697025941476}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Convex: 0
+  m_CookingOptions: 14
+  m_Mesh: {fileID: -2432090755550338912, guid: 7dc4e0ae7604e734d93c4fc9557e404e, type: 3}

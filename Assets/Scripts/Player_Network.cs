@@ -9,9 +9,6 @@ public class Player_Network : NetworkBehaviour
     public GameObject[] pieces;
 
 
-    //public GameObject[,] tiles;
-
-    public Vector2[,] position_arr;
 
     public Material tan;
     public Material black;
@@ -26,12 +23,6 @@ public class Player_Network : NetworkBehaviour
 
     public float shift_amount;
 
-    //public GameController.MySyncList flattened_tile_array;
-
-    //public int FlattenedIndex(int x, int y)
-   // {
-    //    return ((x * 8) + y);
-   // }
 
     public Tile GetTileAt(GameObject start, int x, int y)
     {
@@ -56,9 +47,7 @@ public class Player_Network : NetworkBehaviour
                         target_tile = target_tile.down_tile.GetComponent<Tile>();
                     }
                 }
-                
-            
-            
+
         }
         // now target tile is bottom left.
         for (int i = 0; i < x; i++)
@@ -76,8 +65,7 @@ public class Player_Network : NetworkBehaviour
         return target_tile;
     }
     public override void OnStartLocalPlayer()
-    {
-        
+    {  
         this.GetComponentInChildren<Camera>().enabled = true;
         GetComponent<CameraScript>().enabled = true;
         camera_holding_object.SetActive(true);
@@ -91,8 +79,7 @@ public class Player_Network : NetworkBehaviour
         {
             white_player = false;
             my_turn = false;
-        }
-        
+        } 
     }
 
     public override void OnStartServer()
@@ -103,9 +90,6 @@ public class Player_Network : NetworkBehaviour
     public void Start()
     {
         game_controller = GameObject.Find("GameControllerObj");
-        Debug.Log(game_controller.GetComponent<GameController>().Flattened_Tiles.Count);
-       // tiles = GameObject.Find("GameControllerObj").GetComponent<GameController>().tile_array;
-        position_arr = GameObject.Find("GameControllerObj").GetComponent<GameController>().position_array;
         shift_amount = GameObject.Find("GameControllerObj").GetComponent<GameController>().shift_amount;
     }
 
@@ -133,7 +117,7 @@ public class Player_Network : NetworkBehaviour
             {
                 if (p.first_move)
                 {
-                    //flattened_tile_array[FlattenedIndex(x_dest, p.y + 1)].m_object.GetComponent<Tile>().occupied == false
+                    
                     if(p.my_tile.GetComponent<Tile>().up_tile)
                         if (y_dest == (p.y + 2) && x_dest == p.x && p.my_tile.GetComponent<Tile>().up_tile.GetComponent<Tile>().occupied == false) return true; //move forward two is allowed.
 
@@ -170,6 +154,82 @@ public class Player_Network : NetworkBehaviour
                     if (y_dest == p.y - 1 && x_dest == p.x - 1 && p.my_tile.GetComponent<Tile>().down_tile.GetComponent<Tile>().left_tile.GetComponent<Tile>().occupied == true) return true; // diagonal move down-left ok if piece on it.
 
                 }
+            }
+        }
+        else if(p.is_king)
+        {
+            if (x_dest == p.x && y_dest == p.y + 1) return true; // move up one is fine.
+            if (x_dest == p.x && y_dest == p.y - 1) return true; // move down one is fine.
+            if (x_dest == p.x + 1 && y_dest == p.y) return true; // move right one is fine.
+            if (x_dest == p.x - 1 && y_dest == p.y) return true; // move left one is fine.
+            if (x_dest == p.x + 1 && y_dest == p.y + 1) return true; // move up and right is fine.
+            if (x_dest == p.x - 1 && y_dest == p.y + 1) return true; // move up and left is fine.
+            if (x_dest == p.x + 1 && y_dest == p.y - 1) return true; // move down and right is fine.
+            if (x_dest == p.x - 1 && y_dest == p.y - 1) return true; // move down and left is fine.
+        }
+        else if(p.is_queen)
+        {
+            //step 1, check rook lines.
+            Tile start_tile = p.my_tile.GetComponent<Tile>();
+            for(int i = p.y; i < 7; i++)
+            {
+                start_tile = start_tile.up_tile.GetComponent<Tile>();
+                if (start_tile.GetComponent<Tile>().x == x_dest && start_tile.GetComponent<Tile>().y == y_dest) return true; // hit up like rook.
+                if (start_tile.GetComponent<Tile>().occupied == true) break; // someone got in the way.
+            }
+            start_tile = p.my_tile.GetComponent<Tile>();
+            for (int i = p.y; i > 0; i--)
+            {
+                start_tile = start_tile.down_tile.GetComponent<Tile>();
+                if (start_tile.GetComponent<Tile>().x == x_dest && start_tile.GetComponent<Tile>().y == y_dest) return true; // hit down like rook.
+                if (start_tile.GetComponent<Tile>().occupied == true) break; // someone got in the way.
+            }
+            start_tile = p.my_tile.GetComponent<Tile>();
+            for (int i = p.x; i < 7; i++)
+            {
+                start_tile = start_tile.right_tile.GetComponent<Tile>();
+                if (start_tile.GetComponent<Tile>().x == x_dest && start_tile.GetComponent<Tile>().y == y_dest) return true; // hit right like rook.
+                if (start_tile.GetComponent<Tile>().occupied == true) break; // someone got in the way.
+            }
+            start_tile = p.my_tile.GetComponent<Tile>();
+            for (int i = p.x; i > 0; i--)
+            {
+                start_tile = start_tile.left_tile.GetComponent<Tile>();
+                if (start_tile.GetComponent<Tile>().x == x_dest && start_tile.GetComponent<Tile>().y == y_dest) return true; // hit left like rook.
+                if (start_tile.GetComponent<Tile>().occupied == true) break; // someone got in the way.
+            }
+            start_tile = p.my_tile.GetComponent<Tile>();
+            //step 2, check bishop lines.
+            while(start_tile.right_tile)
+            {
+                if (!start_tile.right_tile.GetComponent<Tile>().up_tile) break; // reached the edge.
+                start_tile = start_tile.right_tile.GetComponent<Tile>().up_tile.GetComponent<Tile>();
+                if (start_tile.GetComponent<Tile>().x == x_dest && start_tile.GetComponent<Tile>().y == y_dest) return true; // hit up right diagonal like bishop.
+                if (start_tile.GetComponent<Tile>().occupied == true) break; // someone got in the way.
+            }
+            start_tile = p.my_tile.GetComponent<Tile>();
+            while (start_tile.right_tile)
+            {
+                if (!start_tile.right_tile.GetComponent<Tile>().down_tile) break; // reached the edge.
+                start_tile = start_tile.right_tile.GetComponent<Tile>().down_tile.GetComponent<Tile>();
+                if (start_tile.GetComponent<Tile>().x == x_dest && start_tile.GetComponent<Tile>().y == y_dest) return true; // hit up right diagonal like bishop.
+                if (start_tile.GetComponent<Tile>().occupied == true) break; // someone got in the way.
+            }
+            start_tile = p.my_tile.GetComponent<Tile>();
+            while (start_tile.left_tile)
+            {
+                if (!start_tile.left_tile.GetComponent<Tile>().down_tile) break; // reached the edge.
+                start_tile = start_tile.left_tile.GetComponent<Tile>().down_tile.GetComponent<Tile>();
+                if (start_tile.GetComponent<Tile>().x == x_dest && start_tile.GetComponent<Tile>().y == y_dest) return true; // hit up right diagonal like bishop.
+                if (start_tile.GetComponent<Tile>().occupied == true) break; // someone got in the way.
+            }
+            start_tile = p.my_tile.GetComponent<Tile>();
+            while (start_tile.left_tile)
+            {
+                if (!start_tile.left_tile.GetComponent<Tile>().up_tile) break; // reached the edge.
+                start_tile = start_tile.left_tile.GetComponent<Tile>().up_tile.GetComponent<Tile>();
+                if (start_tile.GetComponent<Tile>().x == x_dest && start_tile.GetComponent<Tile>().y == y_dest) return true; // hit up right diagonal like bishop.
+                if (start_tile.GetComponent<Tile>().occupied == true) break; // someone got in the way.
             }
         }
         return false;
@@ -331,6 +391,7 @@ public class Player_Network : NetworkBehaviour
 
         obj.transform.position = new Vector3(dest.transform.position.x, obj.transform.position.y, dest.transform.position.z);
         obj.GetComponent<Piece>().my_tile.GetComponent<Tile>().occupied = false;
+        obj.GetComponent<Piece>().my_tile.GetComponent<Tile>().game_piece = null;
         obj.GetComponent<Piece>().x = dest.GetComponent<Tile>().x;
         obj.GetComponent<Piece>().y = dest.GetComponent<Tile>().y;
 
@@ -349,6 +410,7 @@ public class Player_Network : NetworkBehaviour
 
         obj.transform.position = new Vector3(dest.transform.position.x, obj.transform.position.y, dest.transform.position.z);
         obj.GetComponent<Piece>().my_tile.GetComponent<Tile>().occupied = false;
+        obj.GetComponent<Piece>().my_tile.GetComponent<Tile>().game_piece = null;
         obj.GetComponent<Piece>().x = dest.GetComponent<Tile>().x;
         obj.GetComponent<Piece>().y = dest.GetComponent<Tile>().y;
 
