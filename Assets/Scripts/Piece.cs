@@ -18,6 +18,8 @@ public class Piece : NetworkBehaviour
 
     public bool first_move;
 
+    [SyncVar] public GameObject my_tile;
+
     private void Start()
     {
         first_move = true;

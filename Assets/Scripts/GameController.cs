@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 
+
+
 public class GameController : NetworkBehaviour
 {
     public int num_players;
@@ -33,6 +35,14 @@ public class GameController : NetworkBehaviour
     public GameObject[,] tile_array;
     public GameObject tile_prefab;
 
+    public struct GameObjectHider
+    {
+       public GameObject m_object;
+    }
+    public class MySyncList : SyncListStruct<GameObjectHider> { };
+
+    public MySyncList Flattened_Tiles;
+
     public Material tan;
     public Material black;
     public Material weird;
@@ -41,6 +51,56 @@ public class GameController : NetworkBehaviour
     public override void OnStartServer()
     {
         BuildBoard();
+        for (int i = 0; i < grid_size; i++)
+        {
+            for (int j = 0; j < grid_size; j++)
+            {
+                if(j+1 < grid_size)
+                {
+                    tile_array[i, j].GetComponent<Tile>().up_tile = tile_array[i, j + 1];
+                }
+                else
+                {
+                    //tile_array[i, j].GetComponent<Tile>().up_tile = null;
+                }
+                if(j-1 >-1)
+                {
+                    tile_array[i, j].GetComponent<Tile>().down_tile = tile_array[i, j - 1];
+                }
+                else
+                {
+                    //tile_array[i, j].GetComponent<Tile>().up_tile = null;
+                }
+                if (i + 1 < grid_size)
+                {
+                    tile_array[i, j].GetComponent<Tile>().right_tile = tile_array[i + 1, j];
+                }
+                else
+                {
+                   // tile_array[i, j].GetComponent<Tile>().up_tile = null;
+                }
+                if (i - 1 > -1)
+                {
+                    tile_array[i, j].GetComponent<Tile>().left_tile = tile_array[i - 1, j];
+                }
+                else
+                {
+                   // tile_array[i, j].GetComponent<Tile>().up_tile = null;
+                }
+            }
+
+        }
+        for (int i = 0; i < grid_size; i++)
+        {
+            for (int j = 0; j < grid_size; j++)
+            {
+                GameObjectHider to_insert;
+                to_insert.m_object = tile_array[i, j].gameObject;
+                Flattened_Tiles.Add(to_insert);
+            }
+                
+        }
+
     }
 
     [Server]
@@ -76,6 +136,7 @@ public class GameController : NetworkBehaviour
                         NetworkServer.Spawn(pawn);
                         tile_array[i, j].GetComponent<Tile>().occupied = true;
                         tile_array[i, j].GetComponent<Tile>().game_piece = pawn;
+                        pawn.GetComponent<Piece>().my_tile = tile_array[i, j];
                         pawn.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
                         pawn.transform.position = new Vector3(tile_array[i, j].transform.position.x, -0.37f, tile_array[i, j].transform.position.z);
                         pawn.GetComponent<Piece>().x = i;
@@ -88,6 +149,7 @@ public class GameController : NetworkBehaviour
                         NetworkServer.Spawn(pawn);
                         tile_array[i, j].GetComponent<Tile>().occupied = true;
                         tile_array[i, j].GetComponent<Tile>().game_piece = pawn;
+                        pawn.GetComponent<Piece>().my_tile = tile_array[i, j];
                         pawn.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
                         pawn.transform.position = new Vector3(tile_array[i, j].transform.position.x, -0.37f, tile_array[i, j].transform.position.z);
                         pawn.GetComponent<Piece>().x = i;
