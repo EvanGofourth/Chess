@@ -8,8 +8,6 @@ public class Player_Network : NetworkBehaviour
     public GameObject camera_holding_object;
     public GameObject[] pieces;
 
-
-
     public Material tan;
     public Material black;
     public Material weird;
@@ -540,15 +538,7 @@ public class Player_Network : NetworkBehaviour
             bool didHit = Physics.Raycast(toMouse, out rhInfo, 500.0f);
             if (didHit)
             {
-              if(isServer)
-              {                           
-                    RpcClickHandler(rhInfo.collider.gameObject);
-              }
-              else
-              {
-                    CmdClickHandler(rhInfo.collider.gameObject);
-              }
-              // This section is for the 'selection' circle that glows beneath a piece.
+                // This section is for the 'selection' circle that glows beneath a piece.
                 if (rhInfo.collider.gameObject)
                 {
                     if (rhInfo.collider.gameObject.GetComponent<Piece>())
@@ -571,7 +561,7 @@ public class Player_Network : NetworkBehaviour
                             selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
                             rhInfo.collider.gameObject.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = true;
                         }
-                        else if(!rhInfo.collider.gameObject.GetComponent<Piece>().white && white_player && selected_piece)
+                        else if (!rhInfo.collider.gameObject.GetComponent<Piece>().white && white_player && selected_piece)
                         {
                             selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
                         }
@@ -586,6 +576,16 @@ public class Player_Network : NetworkBehaviour
                             selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
                     }
                 }
+              if (isServer)
+              {                           
+                    RpcClickHandler(rhInfo.collider.gameObject);
+              }
+              else
+              {
+                    CmdClickHandler(rhInfo.collider.gameObject);
+              }
+             
+               
                 
             }
             else

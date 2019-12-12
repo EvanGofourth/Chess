@@ -149,19 +149,19 @@ PrefabInstance:
         type: 3}
       propertyPath: rook_black_prefab
       value: 
-      objectReference: {fileID: 415423708723712329, guid: 6e193903ce2dbd44f9eef6cca6199f3e,
+      objectReference: {fileID: 6728388060840143313, guid: c8b86caa5a6fd034aa5f52ea21146ce5,
         type: 3}
     - target: {fileID: 3372314838699564360, guid: a089379d4a1312341ab4402c1a13989d,
         type: 3}
       propertyPath: knight_black_prefab
       value: 
-      objectReference: {fileID: 8223696326848069405, guid: 95e0070ab0af9b6448b423d531b37488,
+      objectReference: {fileID: 7623704563711242675, guid: cf6df90baa7ed354b933c3c9f96919d4,
         type: 3}
     - target: {fileID: 3372314838699564360, guid: a089379d4a1312341ab4402c1a13989d,
         type: 3}
       propertyPath: bishop_black_prefab
       value: 
-      objectReference: {fileID: 6357217151316859527, guid: 5c1c89881d007fb4299ad298d7497737,
+      objectReference: {fileID: 5108574911482845501, guid: 4239d1e6d57257842a3f49740ba9120f,
         type: 3}
     - target: {fileID: 3372314838699564360, guid: a089379d4a1312341ab4402c1a13989d,
         type: 3}
@@ -180,6 +180,24 @@ PrefabInstance:
       propertyPath: king_prefab
       value: 
       objectReference: {fileID: 4430084318153970124, guid: bd036197dd2f9f2499359523b5a8dec5,
+        type: 3}
+    - target: {fileID: 3372314838699564360, guid: a089379d4a1312341ab4402c1a13989d,
+        type: 3}
+      propertyPath: rook_prefab
+      value: 
+      objectReference: {fileID: 7945320056956062704, guid: 6e193903ce2dbd44f9eef6cca6199f3e,
+        type: 3}
+    - target: {fileID: 3372314838699564360, guid: a089379d4a1312341ab4402c1a13989d,
+        type: 3}
+      propertyPath: bishop_prefab
+      value: 
+      objectReference: {fileID: 3042493821651805949, guid: 5c1c89881d007fb4299ad298d7497737,
+        type: 3}
+    - target: {fileID: 3372314838699564360, guid: a089379d4a1312341ab4402c1a13989d,
+        type: 3}
+      propertyPath: knight_prefab
+      value: 
+      objectReference: {fileID: 3596278679882322656, guid: 95e0070ab0af9b6448b423d531b37488,
         type: 3}
     - target: {fileID: 3372314838699564361, guid: a089379d4a1312341ab4402c1a13989d,
         type: 3}

@@ -144,26 +144,93 @@ public class GameController : NetworkBehaviour
                 {
                     if(i == 0 || i == 7)
                     {
-                        // Place a rook.
-                        GameObject rook = Instantiate(rook_prefab, grid.transform);
-                        //NetworkServer.Spawn(rook);
-                        rook.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
-                        rook.transform.position = new Vector3(tile_array[i, j].transform.position.x, 1, tile_array[i, j].transform.position.z);
+                        if(j == 0)
+                        {
+                            // Place a rook.
+                            GameObject rook = Instantiate(rook_prefab, grid.transform);
+                            NetworkServer.Spawn(rook);
+                            tile_array[i, j].GetComponent<Tile>().occupied = true;
+                            tile_array[i, j].GetComponent<Tile>().game_piece = rook;
+                            rook.GetComponent<Piece>().my_tile = tile_array[i, j];
+                            rook.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
+                            rook.transform.position = new Vector3(tile_array[i, j].transform.position.x, 0.542f, tile_array[i, j].transform.position.z);
+                            rook.GetComponent<Piece>().x = i;
+                            rook.GetComponent<Piece>().y = j;
+                        }
+                        else
+                        {
+                            // Place a rook.
+                            GameObject rook = Instantiate(rook_black_prefab, grid.transform);
+                            NetworkServer.Spawn(rook);
+                            tile_array[i, j].GetComponent<Tile>().occupied = true;
+                            tile_array[i, j].GetComponent<Tile>().game_piece = rook;
+                            rook.GetComponent<Piece>().my_tile = tile_array[i, j];
+                            rook.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
+                            rook.transform.position = new Vector3(tile_array[i, j].transform.position.x, 0.542f, tile_array[i, j].transform.position.z);
+                            rook.GetComponent<Piece>().x = i;
+                            rook.GetComponent<Piece>().y = j;
+                        }
+                        
                     }
                     if(i == 1 || i == 6)
                     {
-                        // Place a knight.
-                        GameObject pawn = Instantiate(knight_prefab, grid.transform);
-                        pawn.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
-                        pawn.transform.position = new Vector3(tile_array[i, j].transform.position.x, 1, tile_array[i, j].transform.position.z);
+                        if (j == 0)
+                        {
+                            // Place a knight.
+                            GameObject knight = Instantiate(knight_prefab, grid.transform);
+                            NetworkServer.Spawn(knight);
+                            tile_array[i, j].GetComponent<Tile>().occupied = true;
+                            tile_array[i, j].GetComponent<Tile>().game_piece = knight;
+                            knight.GetComponent<Piece>().my_tile = tile_array[i, j];
+                            knight.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
+                            knight.transform.position = new Vector3(tile_array[i, j].transform.position.x, 0.542f, tile_array[i, j].transform.position.z);
+                            knight.GetComponent<Piece>().x = i;
+                            knight.GetComponent<Piece>().y = j;
+                            knight.transform.Rotate(0f, 180f, 0f, Space.World);
+                        }
+                        else
+                        {
+                            // Place a knight.
+                            GameObject knight = Instantiate(knight_black_prefab, grid.transform);
+                            NetworkServer.Spawn(knight);
+                            tile_array[i, j].GetComponent<Tile>().occupied = true;
+                            tile_array[i, j].GetComponent<Tile>().game_piece = knight;
+                            knight.GetComponent<Piece>().my_tile = tile_array[i, j];
+                            knight.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
+                            knight.transform.position = new Vector3(tile_array[i, j].transform.position.x, 0.542f, tile_array[i, j].transform.position.z);
+                            knight.GetComponent<Piece>().x = i;
+                            knight.GetComponent<Piece>().y = j;
+                            //knight.transform.Rotate(0f, -90f, 0f, Space.World);
+                        }
                     }
                     if(i == 2 || i == 5)
                     {
-                        // Place a bishop.
-                        GameObject knight = Instantiate(bishop_prefab, grid.transform);
-                        //NetworkServer
-                        knight.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
-                        knight.transform.position = new Vector3(tile_array[i, j].transform.position.x, 1, tile_array[i, j].transform.position.z);
+                        if (j == 0)
+                        {
+                            // Place a bishop.
+                            GameObject bishop = Instantiate(bishop_prefab, grid.transform);
+                            NetworkServer.Spawn(bishop);
+                            tile_array[i, j].GetComponent<Tile>().occupied = true;
+                            tile_array[i, j].GetComponent<Tile>().game_piece = bishop;
+                            bishop.GetComponent<Piece>().my_tile = tile_array[i, j];
+                            bishop.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
+                            bishop.transform.position = new Vector3(tile_array[i, j].transform.position.x, 0.542f, tile_array[i, j].transform.position.z);
+                            bishop.GetComponent<Piece>().x = i;
+                            bishop.GetComponent<Piece>().y = j;
+                        }
+                        else
+                        {
+                            // Place a bishop.
+                            GameObject bishop = Instantiate(bishop_black_prefab, grid.transform);
+                            NetworkServer.Spawn(bishop);
+                            tile_array[i, j].GetComponent<Tile>().occupied = true;
+                            tile_array[i, j].GetComponent<Tile>().game_piece = bishop;
+                            bishop.GetComponent<Piece>().my_tile = tile_array[i, j];
+                            bishop.transform.position += new Vector3(i * shift_amount, 0, j * shift_amount);
+                            bishop.transform.position = new Vector3(tile_array[i, j].transform.position.x, 0.542f, tile_array[i, j].transform.position.z);
+                            bishop.GetComponent<Piece>().x = i;
+                            bishop.GetComponent<Piece>().y = j;
+                        }
                     }
                     if( i == 3)
                     {
