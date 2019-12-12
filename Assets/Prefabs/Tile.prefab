@@ -61,7 +61,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 28c59079327484a46b8006e84573b5f3, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -112,6 +112,10 @@ MonoBehaviour:
   x: 0
   y: 0
   tan_spawn: 0
+  up_tile: {fileID: 0}
+  down_tile: {fileID: 0}
+  left_tile: {fileID: 0}
+  right_tile: {fileID: 0}
 --- !u!114 &5882274875750462207
 MonoBehaviour:
   m_ObjectHideFlags: 0

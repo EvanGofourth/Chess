@@ -129,6 +129,7 @@ public class GameController : NetworkBehaviour
                     {
                         // Place a pawn.
                         GameObject pawn = Instantiate(pawn_black_prefab, grid.transform);
+                        
                         NetworkServer.Spawn(pawn);
                         tile_array[i, j].GetComponent<Tile>().occupied = true;
                         tile_array[i, j].GetComponent<Tile>().game_piece = pawn;
