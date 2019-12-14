@@ -2,18 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
+using UnityEngine.UI;
 
 public class Player_Network : NetworkBehaviour
 {
     public GameObject camera_holding_object;
-    public GameObject[] pieces;
+
+    public GameObject my_king;
 
     public Material tan;
     public Material black;
     public Material weird;
 
     public bool white_player;
-    public bool my_turn;
+    [SyncVar] public bool my_turn;
 
     [SyncVar] public GameObject selected_piece;
 
@@ -67,6 +69,48 @@ public class Player_Network : NetworkBehaviour
         this.GetComponentInChildren<Camera>().enabled = true;
         GetComponent<CameraScript>().enabled = true;
         camera_holding_object.SetActive(true);
+
+        GameObject[] pieces = GameObject.FindGameObjectsWithTag("Piece");
+        List<GameObject> black_pieces = new List<GameObject>();
+        for (int i = 0; i < pieces.Length; i++)
+        {
+            if (!pieces[i].GetComponent<Piece>().white)
+            {
+                black_pieces.Add(pieces[i]);
+            }
+        }
+        List<GameObject> white_pieces = new List<GameObject>();
+        for (int i = 0; i < pieces.Length; i++)
+        {
+            if (pieces[i].GetComponent<Piece>().white)
+            {
+                white_pieces.Add(pieces[i]);
+            }
+        }
+
+        GameObject white_king = null;
+        GameObject black_king = null;
+        for (int i = 0; i < white_pieces.Capacity; i++)
+        {
+            if (white_pieces[i].GetComponent<Piece>().is_king) white_king = white_pieces[i];
+        }
+           
+        
+        for (int i = 0; i < black_pieces.Capacity; i++)
+        {
+            if (black_pieces[i].GetComponent<Piece>().is_king) black_king = black_pieces[i];
+        }
+           
+        if (white_player)
+        {
+            my_king = white_king;
+
+        }         
+        else
+        {
+            my_king = black_king;
+        }
+           
 
     }
 
@@ -312,6 +356,51 @@ public class Player_Network : NetworkBehaviour
         return false;
     }
 
+    public bool InCheck(Tile tile_to_check)
+    {
+       
+        if(white_player)
+        {
+            GameObject[] pieces = GameObject.FindGameObjectsWithTag("Piece");
+            List<GameObject> black_pieces = new List<GameObject>();
+            for(int i = 0; i < pieces.Length;i++)
+            {
+                if(! pieces[i].GetComponent<Piece>().white)
+                {
+                    black_pieces.Add(pieces[i]);
+                }
+            }
+            for(int i = 0; i < black_pieces.Capacity; i++)
+            {
+                if(CanAttack(black_pieces[i], tile_to_check.x, tile_to_check.y))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+        else
+        {
+            GameObject[] pieces = GameObject.FindGameObjectsWithTag("Piece");
+            List<GameObject> white_pieces = new List<GameObject>();
+            for (int i = 0; i < pieces.Length; i++)
+            {
+                if (pieces[i].GetComponent<Piece>().white)
+                {
+                    white_pieces.Add(pieces[i]);
+                }
+            }
+            for (int i = 0; i < white_pieces.Capacity; i++)
+            {
+                if (CanAttack(white_pieces[i], tile_to_check.x, tile_to_check.y))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
     public bool CanAttack(GameObject obj, int x_dest, int y_dest)
     {
         Piece p = obj.GetComponent<Piece>();
@@ -493,6 +582,11 @@ public class Player_Network : NetworkBehaviour
         obj.GetComponent<Piece>().my_tile = dest;
 
         selected_piece = null;
+
+        this.transform.Find("Audio Source").GetComponent<AudioSource>().Play();
+
+        if(isServer)
+            GameObject.Find("GameControllerObj").GetComponent<GameController>().white_turn = !GameObject.Find("GameControllerObj").GetComponent<GameController>().white_turn;
     }
 
     [Command]
@@ -513,7 +607,13 @@ public class Player_Network : NetworkBehaviour
         obj.GetComponent<Piece>().my_tile = dest;
 
         selected_piece = null;
+        if(!isServer)
+            GameObject.Find("GameControllerObj").GetComponent<GameController>().white_turn = !GameObject.Find("GameControllerObj").GetComponent<GameController>().white_turn;
     }
+
+
+
+
 
     [ClientRpc]
     public void RpcDestroy(GameObject obj)
@@ -531,68 +631,106 @@ public class Player_Network : NetworkBehaviour
     
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        // Locate king object. If he is in check, alert the player.
+        if(InCheck(my_king.GetComponent<Piece>().my_tile.GetComponent<Tile>()))
         {
-            Ray toMouse = this.GetComponentInChildren<Camera>().ScreenPointToRay(Input.mousePosition);
-            RaycastHit rhInfo;
-            bool didHit = Physics.Raycast(toMouse, out rhInfo, 500.0f);
-            if (didHit)
+            Debug.Log("Check!");
+        }
+
+        if (GameObject.Find("GameControllerObj").GetComponent<GameController>().white_turn && white_player)
+        {
+            my_turn = true;
+        }
+        else if(!GameObject.Find("GameControllerObj").GetComponent<GameController>().white_turn && !white_player)
+        {
+            my_turn = true;
+        }
+        else
+        {
+            my_turn = false;
+        }
+
+        if(!white_player && my_turn || white_player && !my_turn)
+        {
+            GameObject.Find("Canvas").transform.Find("Text").GetComponent<Text>().color = Color.black;
+            GameObject.Find("Canvas").transform.Find("Text").GetComponent<Text>().text = "Black Turn";
+        }
+        else
+        {
+            GameObject.Find("Canvas").transform.Find("Text").GetComponent<Text>().color = Color.white;
+            GameObject.Find("Canvas").transform.Find("Text").GetComponent<Text>().text = "White Turn";
+        }
+        if(my_turn)
+        {
+            if (Input.GetMouseButtonDown(0))
             {
-                // This section is for the 'selection' circle that glows beneath a piece.
-                if (rhInfo.collider.gameObject)
+                Ray toMouse = this.GetComponentInChildren<Camera>().ScreenPointToRay(Input.mousePosition);
+                RaycastHit rhInfo;
+                bool didHit = Physics.Raycast(toMouse, out rhInfo, 500.0f);
+                if (didHit)
                 {
-                    if (rhInfo.collider.gameObject.GetComponent<Piece>())
+                    // This section is for the 'selection' circle that glows beneath a piece.
+                    if (rhInfo.collider.gameObject)
                     {
-                        if (rhInfo.collider.gameObject.GetComponent<Piece>().white && white_player && !selected_piece)
+                        if (rhInfo.collider.gameObject.GetComponent<Piece>())
                         {
-                            rhInfo.collider.gameObject.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = true;
+                           
+                            if (rhInfo.collider.gameObject.GetComponent<Piece>().white && white_player && !selected_piece)
+                            {
+                                rhInfo.collider.gameObject.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = true;
+                            }
+                            else if (rhInfo.collider.gameObject.GetComponent<Piece>().white && white_player && selected_piece)
+                            {
+                                selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
+                                rhInfo.collider.gameObject.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = true;
+                            }
+                            else if (!rhInfo.collider.gameObject.GetComponent<Piece>().white && !white_player && !selected_piece)
+                            {
+                                rhInfo.collider.gameObject.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = true;
+                            }
+                            else if (!rhInfo.collider.gameObject.GetComponent<Piece>().white && !white_player && selected_piece)
+                            {
+                                selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
+                                rhInfo.collider.gameObject.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = true;
+                            }
+                            else if (!rhInfo.collider.gameObject.GetComponent<Piece>().white && white_player && selected_piece)
+                            {
+                                selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
+                            }
+                            else if (rhInfo.collider.gameObject.GetComponent<Piece>().white && !white_player && selected_piece)
+                            {
+                                selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
+                            }
+                            else
+                            {
+                                selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
+                            }
                         }
-                        else if (rhInfo.collider.gameObject.GetComponent<Piece>().white && white_player && selected_piece)
+                        else
                         {
-                            selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
-                            rhInfo.collider.gameObject.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = true;
+                            if (selected_piece)
+                                selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
                         }
-                        else if (!rhInfo.collider.gameObject.GetComponent<Piece>().white && !white_player && !selected_piece)
-                        {
-                            rhInfo.collider.gameObject.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = true;
-                        }
-                        else if (!rhInfo.collider.gameObject.GetComponent<Piece>().white && !white_player && selected_piece)
-                        {
-                            selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
-                            rhInfo.collider.gameObject.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = true;
-                        }
-                        else if (!rhInfo.collider.gameObject.GetComponent<Piece>().white && white_player && selected_piece)
-                        {
-                            selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
-                        }
-                        else if (rhInfo.collider.gameObject.GetComponent<Piece>().white && !white_player && selected_piece)
-                        {
-                            selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
-                        }
+                    }
+                    if (isServer)
+                    {
+                        RpcClickHandler(rhInfo.collider.gameObject);
                     }
                     else
                     {
-                        if (selected_piece)
-                            selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
+                        CmdClickHandler(rhInfo.collider.gameObject);
                     }
+
+
+
                 }
-              if (isServer)
-              {                           
-                    RpcClickHandler(rhInfo.collider.gameObject);
-              }
-              else
-              {
-                    CmdClickHandler(rhInfo.collider.gameObject);
-              }
-             
-               
-                
-            }
-            else
-            {
-                if(selected_piece)
-                    selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
+                else
+                {
+                    if (selected_piece)
+                        selected_piece.transform.Find("ColorCircle").GetComponent<MeshRenderer>().enabled = false;
+                }
             }
         }
     }
+       
 }

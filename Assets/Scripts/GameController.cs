@@ -12,6 +12,8 @@ public class GameController : NetworkBehaviour
     public GameObject active_player;
     public bool p1_active;
 
+    [SyncVar] public bool white_turn;
+
     public GameObject grid;
 
     public GameObject pawn_prefab;
@@ -43,6 +45,7 @@ public class GameController : NetworkBehaviour
 
     public override void OnStartServer()
     {
+        white_turn = true;
         BuildBoard();
         for (int i = 0; i < grid_size; i++)
         {
